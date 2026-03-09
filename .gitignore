@@ -1,0 +1,6 @@
+# Keep it for you ;D
+venv/
+.venv/
+*.pyc
+__pycache__/
+pytest__cache/

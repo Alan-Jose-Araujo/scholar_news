@@ -1,0 +1,15 @@
+# Testing
+pytest
+
+# Http Client
+requests
+fake-useragent
+
+# HTML Parsers
+beautifulsoup4
+
+# Schemas
+pydantic
+
+# Utils
+dateparser
