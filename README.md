@@ -9,7 +9,7 @@
 
 The project is still in development and the next updates will focus on the following tasks:
 
-- [ ] Build the HTTP Client Service
+- [x] Build the HTTP Client Service
 
 - [ ] Build the Base Scraper Service
 
