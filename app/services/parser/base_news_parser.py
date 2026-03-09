@@ -41,28 +41,29 @@ class BaseNewsParser(ABC):
         pass
 
     @abstractmethod
-    def page_has_next_pagination_link(self, htmlText: str) -> bool:
+    def page_has_next_pagination_link(self, html_text: str) -> bool:
         pass
 
     @abstractmethod
-    def get_article_links_from_index_page(self, htmlText: str) -> List[str]:
+    def get_article_links_from_index_page(self, html_text: str) -> List[str]:
         pass
 
-    def parse(self, htmlText: str) -> NewsSchema:
+    def parse(self, html_text: str) -> NewsSchema:
         try:
-            soup: BeautifulSoup = BeautifulSoup(htmlText, "html.parser")
+            soup: BeautifulSoup = BeautifulSoup(html_text, "html.parser")
             if not soup:
-                raise ValueError("[Parse error] Error on parse news: soup is None.")
+                raise ValueError("[Parse Exception] Error on parse news: soup is None.")
             related_links_raw: List[NewsRelatedLink] = self._extract_related_links_(soup)
             related_links: List[NewsRelatedLink] = [
                 link.http_schema if hasattr(link, 'http_schema') else link
                 for link in related_links_raw
             ]
+            thumbnail_url: Optional[str] = self._extract_thumbnail_url_(soup)
             news_data: dict = {
                 "title": self._extract_title_(soup),
                 "summary": self._extract_summary_(soup),
                 "content": self._extract_content_(soup),
-                "thumbnail_url": self._extract_thumbnail_url_(soup),
+                "thumbnail_url": thumbnail_url,
                 "publish_date": self._extract_publish_date_(soup),
                 "last_update_date": self._extract_last_update_date_(soup),
                 "related_links": related_links
