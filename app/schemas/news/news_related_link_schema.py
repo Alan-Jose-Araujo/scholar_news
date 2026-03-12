@@ -12,4 +12,4 @@ class NewsRelatedLink(BaseModel):
 
     url: HttpUrl = Field(...)
 
-    http_schema: HttpLinkSchemaEnum = Field(..., default=HttpLinkSchemaEnum.HTTPS)
+    http_schema: HttpLinkSchemaEnum = Field(default=HttpLinkSchemaEnum.HTTPS)
