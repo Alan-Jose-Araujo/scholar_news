@@ -18,7 +18,7 @@ class IFPENewsParser(BaseNewsParser):
         return parsed_datetime.date()
 
     def _extract_title_(self, soup: BeautifulSoup) -> str:
-        title_soup = soup.find("h2", class_="noticia__titulo")
+        title_soup = soup.find("h2", class_="post__title")
         if not title_soup:
             raise Exception("[Parse Exception] Error on extract title: Title element is None")
         return title_soup.get_text(strip=True)
@@ -44,7 +44,11 @@ class IFPENewsParser(BaseNewsParser):
         if not thumbnail_imgs:
             return None
         img = thumbnail_imgs[0]
-        return img.get("src") or img.get("srcset") or img.get("data-src")
+        src = img.get("src") or img.get("srcset") or img.get("data-src")
+        if src and not src.startswith("http"):
+            # Prepend the IFPE base URL for relative paths
+            src = "https://portal.ifpe.edu.br/" + src.lstrip("/")
+        return src
 
     def _extract_publish_date_(self, soup: BeautifulSoup) -> Optional[date]:
         publish_date_soup = soup.find("span", class_="post__published")
@@ -61,7 +65,7 @@ class IFPENewsParser(BaseNewsParser):
         return self._parse_portuguese_date_string_(updated_date_text)
 
     def _extract_related_links_(self, soup: BeautifulSoup) -> List[NewsRelatedLink]:
-        anchors = soup.select("a")
+        anchors = soup.select("p a")
         related_links: List[NewsRelatedLink] = []
         for anchor in anchors:
             link_href = anchor.get("href")
@@ -72,10 +76,8 @@ class IFPENewsParser(BaseNewsParser):
                 related_link = NewsRelatedLink(text=link_text, url=link_href)
                 related_links.append(related_link)
             except Exception as e:
-                # Optionally log or print the error
                 continue
         return related_links
-
 
     def page_has_next_pagination_link(self, html_text: str) -> bool:
         soup = BeautifulSoup(html_text, "html.parser")
