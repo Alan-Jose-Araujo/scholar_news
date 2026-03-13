@@ -5,7 +5,8 @@
 from pydantic import BaseModel, Field, HttpUrl
 from typing import Optional, List
 from datetime import date, datetime
-from app.schemas.news.news_related_link_schema import HttpLinkSchemaEnum
+from app.schemas.news.news_related_link_schema import NewsRelatedLink
+from app.schemas.scraper.scraper_source_schema import ScraperSourceSchema
 
 class NewsSchema(BaseModel):
 
@@ -23,8 +24,10 @@ class NewsSchema(BaseModel):
 
     last_update_date: Optional[date] = Field(default=None)
 
-    related_links: List[HttpLinkSchemaEnum] = Field(default=[])
+    related_links: List[NewsRelatedLink] = Field(default=[])
 
     scraped_on_page: Optional[int] = Field(default=None)
+
+    source: ScraperSourceSchema = Field(default=None)
 
     scraped_at: datetime = Field(..., default_factory=datetime.now)

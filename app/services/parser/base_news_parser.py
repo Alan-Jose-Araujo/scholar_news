@@ -53,11 +53,7 @@ class BaseNewsParser(ABC):
             soup: BeautifulSoup = BeautifulSoup(html_text, "html.parser")
             if not soup:
                 raise ValueError("[Parse Exception] Error on parse news: soup is None.")
-            related_links_raw: List[NewsRelatedLink] = self._extract_related_links_(soup)
-            related_links: List[NewsRelatedLink] = [
-                link.http_schema if hasattr(link, 'http_schema') else link
-                for link in related_links_raw
-            ]
+            related_links: List[NewsRelatedLink] = self._extract_related_links_(soup)
             thumbnail_url: Optional[str] = self._extract_thumbnail_url_(soup)
             news_data: dict = {
                 "title": self._extract_title_(soup),
