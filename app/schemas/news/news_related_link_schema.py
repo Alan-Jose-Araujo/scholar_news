@@ -4,7 +4,6 @@
 
 from pydantic import BaseModel, Field, HttpUrl
 from typing import Optional
-from app.schemas.news.http_link_schema_enum import HttpLinkSchemaEnum
 
 class NewsRelatedLink(BaseModel):
 
@@ -12,4 +11,5 @@ class NewsRelatedLink(BaseModel):
 
     url: HttpUrl = Field(...)
 
-    http_schema: HttpLinkSchemaEnum = Field(default=HttpLinkSchemaEnum.HTTPS)
+    def has_insecure_schema(self) -> bool :
+        return not "https" in str(self.url)
