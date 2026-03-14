@@ -41,6 +41,10 @@ class BaseNewsParser(ABC):
         pass
 
     @abstractmethod
+    def extract_publish_dates_from_index_page(self, html_text: str) -> List[date]:
+        pass
+
+    @abstractmethod
     def page_has_next_pagination_link(self, html_text: str) -> bool:
         pass
 

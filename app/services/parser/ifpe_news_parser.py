@@ -78,6 +78,22 @@ class IFPENewsParser(BaseNewsParser):
             except Exception as e:
                 continue
         return related_links
+    
+    def extract_publish_dates_from_index_page(self, html_text: str) -> List[date]:
+        soup: BeautifulSoup = BeautifulSoup(html_text, "html.parser")
+        if not soup:
+            raise ValueError("[Parse Exception] Error on parse news: soup is None.")
+        publish_dates_soup: BeautifulSoup = soup.select("article.noticia span.noticia__data")
+        if not publish_dates_soup:
+            return []
+        extracted_publish_dates: List[date] = []
+        for date_soup in publish_dates_soup:
+            date_as_text: str = date_soup.getText(strip=True)
+            parsed_date: date = self._parse_portuguese_date_string_(date_as_text)
+            if not parsed_date:
+                continue
+            extracted_publish_dates.append(parsed_date)
+        return extracted_publish_dates
 
     def page_has_next_pagination_link(self, html_text: str) -> bool:
         soup = BeautifulSoup(html_text, "html.parser")
