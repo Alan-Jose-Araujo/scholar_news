@@ -1,6 +1,7 @@
 import os
 import pytest
 from app.services.parser.ifpe_news_parser import IFPENewsParser
+from datetime import date
 
 @pytest.fixture
 def index_html():
@@ -25,3 +26,13 @@ def test_page_has_next_pagination_link(index_html):
     # Remove 'Próxima Página' to test False
     html_no_next = index_html.replace('Próxima Página', '')
     assert parser.page_has_next_pagination_link(html_no_next) is False
+
+def test_get_publish_dates_from_index_page(index_html):
+    parser = IFPENewsParser()
+    date_list = parser.extract_publish_dates_from_index_page(index_html)
+    assert len(date_list) == 16
+    all_are_dates = True
+    for date_item in date_list:
+        if not isinstance(date_item, date):
+            all_are_dates = False
+    assert all_are_dates
