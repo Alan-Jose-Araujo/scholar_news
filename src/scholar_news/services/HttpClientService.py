@@ -32,7 +32,7 @@ class HttpClientService:
         retry_policy = Retry(
             total=retries,
             backoff_factor=backoff_factor,
-            status_forcelist=(429, 500, 502, 503, 504),
+            status_forcelist=frozenset({429, 500, 502, 503, 504}),
             allowed_methods=frozenset(
                 {"DELETE", "GET", "HEAD", "OPTIONS", "PUT", "TRACE"}
             ),
