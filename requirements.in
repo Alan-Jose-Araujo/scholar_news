@@ -1,0 +1,5 @@
+pydantic==2.12
+pytest==9.0
+pytest-cov==7.1.0
+requests==2.34.2
+urllib3==2.8.0
