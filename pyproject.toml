@@ -6,3 +6,6 @@ dependencies = []
 
 [project.optional-dependencies]
 dev = ["pytest"]
+
+[project.scripts]
+scholar_news = "scholar_news.main:main"
